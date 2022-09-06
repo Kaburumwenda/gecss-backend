@@ -1,0 +1,29 @@
+version: '3.7'
+
+services:
+  GECSS_V3egine:
+    restart: always
+    image: GECSS_V3egine
+    container_name: "GECSS_V3egine"
+    volumes:
+      - static:/static
+      - .:/app
+    env_file:
+      - .env
+    build:
+      context: .
+    ports:
+      - "8000:8000"
+
+  nginx:
+    build: ./nginx
+    volumes:
+      - static:/static
+    ports:
+      - "80:80"
+    depends_on:
+      - GECSS_V3egine
+
+volumes:
+  static:
+

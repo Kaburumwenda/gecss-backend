@@ -38,3 +38,12 @@ class UserListserializer(serializers.ModelSerializer):
         model = User
         fields = ('id', 'username',
                   'first_name', 'last_name', 'email', 'date_joined', 'is_active', 'is_staff', 'password')
+
+
+class StaffAccountSerializer(ModelSerializer):
+    class Meta:
+        model = StaffAccount
+        fields = [ 
+            'id','staff', 'username','idNo','phone','alt_phone', 'designation', 'department', 'sex','age',
+            'operation_area', 'status','createdAt','updatedAt'
+        ]

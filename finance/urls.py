@@ -4,7 +4,7 @@ from .import office
 
 urlpatterns = [
     path('v1/user/transaction', views.userTransaction),
-    path('v1/user/account', views.userAccounts),
+    path('v1/user/account', views.userAccounts ),
 
     #### OFFICE 
     path('v1/accounts', office.userAccountList),

@@ -18,4 +18,4 @@ class BatteryStationSerializer(serializers.ModelSerializer):
 class BatterySwapSerializer(serializers.ModelSerializer):
     class Meta:
         model = BatterySwap
-        fields = ['id', 'bike_no', 'mem_no', 'battery_code1', 'amount', 'status', 'createdAt', 'updatedAt' ]
+        fields = ['id', 'bike_no', 'mem_no', 'battery_code1', 'amount', 'source', 'status', 'createdAt', 'updatedAt' ]

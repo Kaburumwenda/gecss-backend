@@ -11,8 +11,8 @@ from rest_framework.decorators import api_view, permission_classes, authenticati
 
 
 @api_view(['GET'])
-# @permission_classes([IsAuthenticated])
-# @authentication_classes([TokenAuthentication ])
+@permission_classes([IsAuthenticated])
+@authentication_classes([TokenAuthentication ])
 def userAccountList(request):
     data = userAccount.objects.all()
     serializer = userAccountSerializer(data, many=True)
@@ -20,8 +20,8 @@ def userAccountList(request):
 
 
 @api_view(['GET'])
-# @permission_classes([IsAuthenticated])
-# @authentication_classes([TokenAuthentication ])
+@permission_classes([IsAuthenticated])
+@authentication_classes([TokenAuthentication ])
 def userAccountbyid(request,id):
     data = userAccount.objects.get(id=id)
     serializer = userAccountSerializer(data, many=False)
@@ -29,6 +29,8 @@ def userAccountbyid(request,id):
 
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
+@authentication_classes([TokenAuthentication ])
 def userAccountUpdate(request,id):
     feedback_msg = {}
     query = userAccount.objects.get(id=id)
@@ -40,6 +42,8 @@ def userAccountUpdate(request,id):
 
 
 @api_view(('GET',))
+@permission_classes([IsAuthenticated])
+@authentication_classes([TokenAuthentication ])
 def userAccountSearch(request, username):
     data = userAccount.objects.filter(user__username=username)
     serializer = userAccountSerializer(data, many=True)
@@ -47,6 +51,8 @@ def userAccountSearch(request, username):
 
 
 @api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+@authentication_classes([TokenAuthentication ])
 def userAccountDelete(request, id):
     feedback_msg = {}
     userAccount.objects.get(id=id).delete()
@@ -54,6 +60,8 @@ def userAccountDelete(request, id):
     return Response(feedback_msg)
 
 class UserAccountCreate(APIView):
+    @permission_classes([IsAuthenticated])
+    @authentication_classes([TokenAuthentication ])
     def post(self, request):
         try:
             data = request.data
@@ -93,8 +101,8 @@ class UserAccountCreate(APIView):
 #### OFFICE > TRANSACTION
 
 @api_view(['GET'])
-# @permission_classes([IsAuthenticated])
-# @authentication_classes([TokenAuthentication ])
+@permission_classes([IsAuthenticated])
+@authentication_classes([TokenAuthentication ])
 def transactionList(request):
     data = Transaction.objects.all()
     serializer = TransactionSerializer(data, many=True)
@@ -102,8 +110,8 @@ def transactionList(request):
 
 
 @api_view(['GET'])
-# @permission_classes([IsAuthenticated])
-# @authentication_classes([TokenAuthentication ])
+@permission_classes([IsAuthenticated])
+@authentication_classes([TokenAuthentication ])
 def transactionbyid(request,id):
     data = Transaction.objects.get(id=id)
     serializer = TransactionSerializer(data, many=False)
@@ -111,6 +119,8 @@ def transactionbyid(request,id):
 
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
+@authentication_classes([TokenAuthentication ])
 def transactionUpdate(request,id):
     feedback_msg = {}
     query = Transaction.objects.get(id=id)
@@ -122,6 +132,8 @@ def transactionUpdate(request,id):
 
 
 @api_view(('GET',))
+@permission_classes([IsAuthenticated])
+@authentication_classes([TokenAuthentication ])
 def transactionSearch(request, cod):
     data = Transaction.objects.filter(user__username=cod )
     serializer = TransactionSerializer(data, many=True)
@@ -129,6 +141,8 @@ def transactionSearch(request, cod):
 
 
 @api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+@authentication_classes([TokenAuthentication ])
 def transactionDelete(request, id):
     feedback_msg = {}
     Transaction.objects.get(id=id).delete()
@@ -138,6 +152,8 @@ def transactionDelete(request, id):
 
 
 class TransactionCreate(APIView):
+    @permission_classes([IsAuthenticated])
+    @authentication_classes([TokenAuthentication ])
     def post(self, request):
         try:
             data = request.data

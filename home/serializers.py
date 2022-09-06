@@ -7,3 +7,9 @@ class BatteryStationSerializer(ModelSerializer):
     class Meta:
         model = BatteryStation
         fields = ['location','description','charged_battery', 'discharged_battery','date', 'getImage']
+
+
+class BranchesSerializer(ModelSerializer):
+    class Meta:
+        model = GecssBranch
+        fields = ['title', 'code', 'status', 'id']

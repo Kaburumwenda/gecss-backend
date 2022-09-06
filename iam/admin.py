@@ -5,3 +5,4 @@ from .models import *
 
 
 admin.site.register(Notifications)
+admin.site.register(StaffAccount)

@@ -24,7 +24,7 @@ class BatteryStation(models.Model):
 class BatterySwap(models.Model):
     bike_no = models.CharField(max_length=150)
     mem_no = models.CharField(max_length=100)
-    # name = models.CharField(max_length=150, null=True)
+    source = models.CharField(max_length=150, default='Online' )
     battery_code1 = models.CharField(max_length=30)
     amount = models.PositiveIntegerField(default=0)
     status = models.CharField(max_length=50, default='Issued')

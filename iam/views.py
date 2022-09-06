@@ -29,3 +29,5 @@ def userList(request):
     data = User.objects.filter(status='Active').order_by('-id')
     serializer = Userlistserializer(data, many=True)
     return Response(serializer.data)
+
+

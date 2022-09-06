@@ -19,6 +19,18 @@ def userTransaction(request):
     return Response(serializer.data)
 
 
+
+# class UserAccount(APIView):
+#     permission_classes = [IsAuthenticated, ]
+#     authentication_classes = [TokenAuthentication, ]
+#     def get(self, request):
+#         user = request.user
+#         data = userAccount.objects.get(user=user)
+#         serializer = userAccountSerializer(data, many=False)
+        
+#         return Response(serializer.data) 
+
+
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 @authentication_classes([TokenAuthentication ])

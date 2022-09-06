@@ -16,3 +16,23 @@ def batteryStation(request):
     data = BatteryStation.objects.all().order_by('-id')
     serializer = BatteryStationSerializer(data, many=True)
     return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+@authentication_classes([TokenAuthentication ])
+def companyBranches(request):
+    data = GecssBranch.objects.all().order_by('-id')
+    serializer = BranchesSerializer(data, many=True)
+    return Response(serializer.data)
+
+
+
+@api_view(['GET'])
+# @permission_classes([IsAuthenticated])
+# @authentication_classes([TokenAuthentication ])
+def companyBranchbyid(request, id):
+    data = GecssBranch.objects.get(id=id)
+    serializer = BranchesSerializer(data, many=False)
+    return Response(serializer.data)
+
