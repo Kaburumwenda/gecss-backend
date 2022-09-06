@@ -5,9 +5,10 @@ RUN pip install --upgrade pip
 COPY ./requirements.txt .
 RUN pip install -r requirements.txt
 
-# RUN pip install django
+RUN pip install django
 RUN pip install djangorestframework
 RUN pip install django-cors-headers
+RUN pip install pillow
 # RUN pip install gunicorn
 
 COPY ./ /app
