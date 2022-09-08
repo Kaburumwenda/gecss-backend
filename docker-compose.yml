@@ -16,6 +16,9 @@ services:
       - "8000:8000"
 
   nginx:
+    restart: always
+    image: gecss_v3_nginx
+    container_name: "gecss_v3_nginx"
     build: ./nginx
     volumes:
       - static:/static
