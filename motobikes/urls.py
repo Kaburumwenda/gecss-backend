@@ -9,4 +9,5 @@ urlpatterns = [
     path('v1/motorbike/update/<int:id>', views.motorbikeUpdate ),
     path('v1/motorbike/search/<str:cod>', views.motorbikeSearch ),
     path('v1/motorbike/delete/<int:id>', views.motorbikeDelete ),
+    path('v1/wandera/etr/test', views.etr_test ),
 ]

@@ -1,5 +1,7 @@
 from django import views
 from django.urls import path
+
+from . import agents
 from .import views
 
 urlpatterns =[
@@ -25,4 +27,10 @@ urlpatterns =[
     path('v1/battery/swap/update/<int:id>', views.batterySwapUpdate ),
     path('v1/battery/swap/search/<str:cod>', views.batterySwapSearch  ),
     path('v1/battery/swap/delete/<int:id>', views.batterySwapDelete ),
+
+    #### AGENTS SWAP BATTERY
+    path('v1/battery/agents/count', agents.agents_batteries),
+    path('v1/battery/agents/swap/create', agents.BatteryAgentsSwapCreate.as_view() ),
+    path('v1/battery/agents/checkbike', agents.checkbike),
+    path('v1/battery/agents/retake_battery', agents.BatteryAgentsRetake.as_view() )
 ]

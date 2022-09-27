@@ -98,13 +98,14 @@ class UserAccountCreate(APIView):
         return Response(response_msg)
 
 
+
 #### OFFICE > TRANSACTION
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 @authentication_classes([TokenAuthentication ])
 def transactionList(request):
-    data = Transaction.objects.all()
+    data = Transaction.objects.all().order_by('-id')[:50]
     serializer = TransactionSerializer(data, many=True)
     return Response(serializer.data)
 

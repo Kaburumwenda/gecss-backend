@@ -10,6 +10,35 @@ from rest_framework.decorators import api_view, permission_classes, authenticati
 from django.db.models import Avg, Count, Q, F
 # Create your views here.
 
+@api_view(['POST'])
+def etr_test(request):
+    invoice_no = ''
+    resp_msg ={}
+    data = request.data
+    inv = data['InvoiceNumber']
+
+    if(inv > 0):
+        invoice_no = inv
+        resp_msg = {
+            "ResultCode":"0",
+            "Success":"True",
+            "CustomerMessage":"Invoice number {} received".format(invoice_no),
+        }
+    elif(inv <= 0):
+        resp_msg = {
+            "ResultCode":"403",
+            "Success":"False",
+            "CustomerMessage":"Oops !!!. server failed to process your request. Invalid entity. Please try again later",
+        }
+    else:
+        resp_msg = {
+            "ResultCode":"503",
+            "Success":"False",
+            "CustomerMessage":"Oops !!!. server failed to process your request. Invalid entity. Please try again later",
+        }
+
+    return Response(resp_msg)
+
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])

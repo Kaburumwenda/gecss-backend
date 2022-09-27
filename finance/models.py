@@ -49,7 +49,7 @@ class userAccount(models.Model):
     updatedAt = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.idNo
+        return self.user.username
 
     def memNo(self):
         return self.user.username
