@@ -1,48 +1,43 @@
 version: '3.7'
 
 services:
+  db:
+    container_name: 'db'
+    image: mysql:5.7
+    ports:
+      - '3307:3306'
+    environment:
+       MYSQL_DATABASE: 'appdb'
+       MYSQL_PASSWORD: 'root'
+       MYSQL_ROOT_PASSWORD: 'root'
+    volumes:
+      - 'db:/var/lib/mysql'
+    command: ['mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci']
+
+  memcached:
+    container_name: 'memcached'
+    image: 'memcached:latest'
+    ports:
+      - "11212:11211"
+
   gecss_v3egine:
     restart: always
     image: gecss_v3egine
     container_name: "gecss_v3egine"
-    volumes:
-      - static:/static
-      - .:/app
     env_file:
       - .env
     build:
       context: .
+    volumes:
+      - static:/static
+      - '.:/base_directory'
     ports:
       - "8000:8000"
-
-  # nginx:
-  #   restart: always
-  #   image: gecss_v3_nginx
-  #   container_name: "gecss_v3_nginx"
-  #   build: ./nginx
-  #   volumes:
-  #     - static:/static
-  #   ports:
-  #     - "80:80"
-  #   depends_on:
-  #     - gecss_v3egine
-  # webserver:
-  #   image: nginx:latest
-  #   ports:
-  #     - 80:80
-  #     - 443:443
-  #   restart: always
-  #   volumes:
-  #     - ./nginx/conf/:/etc/nginx/conf.d/:ro
-  #     - ./certbot/www:/var/www/certbot/:ro
-  #     - ./certbot/conf/:/etc/nginx/ssl/:ro
-  #     - static:/static
-  # certbot:
-  #   image: certbot/certbot:latest
-  #   volumes:
-  #     - ./certbot/www/:/var/www/certbot/:rw
-  #     - ./certbot/conf/:/etc/letsencrypt/:rw
+    depends_on:
+      - db
+      - memcached
 
 volumes:
+  db:
   static:
-
+  .:

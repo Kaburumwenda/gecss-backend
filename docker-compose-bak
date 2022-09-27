@@ -1,0 +1,48 @@
+version: '3.7'
+
+services:
+  gecss_v3egine:
+    restart: always
+    image: gecss_v3egine
+    container_name: "gecss_v3egine"
+    volumes:
+      - static:/static
+      - .:/app
+    env_file:
+      - .env
+    build:
+      context: .
+    ports:
+      - "8000:8000"
+
+  # nginx:
+  #   restart: always
+  #   image: gecss_v3_nginx
+  #   container_name: "gecss_v3_nginx"
+  #   build: ./nginx
+  #   volumes:
+  #     - static:/static
+  #   ports:
+  #     - "80:80"
+  #   depends_on:
+  #     - gecss_v3egine
+  # webserver:
+  #   image: nginx:latest
+  #   ports:
+  #     - 80:80
+  #     - 443:443
+  #   restart: always
+  #   volumes:
+  #     - ./nginx/conf/:/etc/nginx/conf.d/:ro
+  #     - ./certbot/www:/var/www/certbot/:ro
+  #     - ./certbot/conf/:/etc/nginx/ssl/:ro
+  #     - static:/static
+  # certbot:
+  #   image: certbot/certbot:latest
+  #   volumes:
+  #     - ./certbot/www/:/var/www/certbot/:rw
+  #     - ./certbot/conf/:/etc/letsencrypt/:rw
+
+volumes:
+  static:
+
