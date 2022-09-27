@@ -7,6 +7,7 @@ RUN pip install -r requirements.txt
 
 # RUN pip install django
 RUN apk add -u zlib-dev jpeg-dev gcc musl-dev
+RUN apt-get -y install default-libmysqlclient-dev
 RUN pip install djangorestframework
 RUN pip install django-cors-headers
 RUN pip install pillow
