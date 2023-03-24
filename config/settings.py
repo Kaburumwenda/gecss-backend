@@ -31,12 +31,14 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     "corsheaders",
+    'import_export',
     'finance',
     'iam',
     'battery',
     'home',
     'motobikes',
     'mpesa',
+    'HRMS',
 ]
 
 MIDDLEWARE = [
@@ -79,39 +81,36 @@ CORS_ALLOW_ALL_ORIGINS = True
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'gecsspostgres',
+#         'USER': 'godwin',
+#         'PASSWORD': 'godwin2022',
+#         'HOST': 'ec2-18-116-60-58.us-east-2.compute.amazonaws.com',
+#         'PORT': '5432',
 #     }
 # }
 
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'appdb',
-#         'HOST': 'db',
+#         'NAME': 'GECSSV3',
+#         'HOST': '34.228.161.119',
 #         'PORT': 3306,
-#         'USER': 'root',
-#         'PASSWORD': 'pass',
+#         'USER': 'godwin',
+#         'PASSWORD': 'Godwin@2021',
 #         'OPTIONS': {'sql_mode': 'STRICT_ALL_TABLES', 'charset': 'utf8mb4',},
 #     }
 # }
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'appdb',
-        'USER': 'root',
-        'PASSWORD': 'Yusuf@2021',
-       # 'auth_plugin':'mysql_native_password',
-        'HOST': 'db',
-        'PORT': '3306',
-        'OPTIONS': {
-        'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
-           }
-    }
-}
 
 
 # Password validation
@@ -148,7 +147,7 @@ TIME_ZONE = 'Africa/Nairobi'
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)

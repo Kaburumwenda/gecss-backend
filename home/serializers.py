@@ -13,3 +13,15 @@ class BranchesSerializer(ModelSerializer):
     class Meta:
         model = GecssBranch
         fields = ['title', 'code', 'status', 'id']
+
+
+class AgentNotificationSerializer(ModelSerializer):
+    class Meta:
+        model = AgentNotification
+        fields = [ 'id', 'title', 'source', 'message', 'date', 'status']
+
+
+class CompanyTrendSerializer(ModelSerializer):
+    class Meta:
+        model = CompanyTrend
+        fields = [ 'id', 'title', 'status', 'date',  'imgurl', 'Imgsrc', 'desc']

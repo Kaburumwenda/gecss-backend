@@ -1,6 +1,8 @@
 from django.urls import path
 from .import views
 from .import office
+from .import expense
+from .import riders
 
 urlpatterns = [
     path('v1/user/transaction', views.userTransaction),
@@ -21,4 +23,17 @@ urlpatterns = [
     path('v1/transaction/update/<int:id>', office.transactionUpdate ),
     path('v1/transaction/delete/<int:id>', office.transactionDelete ),
     path('v1/transaction/search/<str:cod>', office.transactionSearch ),
+
+    #### RIDERS
+    path('v1/finance/riders/mini_transaction', riders.riderTransaction),
+
+    #### EXPENSES
+    path('v1/account/expense', expense.expenseList),
+    path('v1/account/expense/statistics', expense.expenseStatistics ),
+    path('v1/account/expense/<int:id>', expense.expensebyid),
+    path('v1/account/expense/create', expense.ExpenseCreate.as_view()),
+    path('v1/account/expense/cancel', expense.ExpenseCancel.as_view()),
+    path('v1/account/expense/delete/<int:id>', expense.expenseDelete),
+    path('v1/account/expense/update/<int:id>', expense.expenseUpdate ),
+    path('v1/account/expense/search/<str:cod>', expense.expenseSearch ),
 ]

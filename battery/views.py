@@ -9,6 +9,41 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from django.db.models import Avg, Count, Q, F
+from datetime import datetime
+
+################### MENU
+### BATTERY
+### SWAP
+### BATTERY STATIONS
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+@authentication_classes([TokenAuthentication ])
+def batteryStatistics(request):
+    batteries = Battery.objects.all().count()
+    issued = Battery.objects.filter(status='Issued').count()
+    depleted = Battery.objects.filter(status='Depleted').count()
+    charging = Battery.objects.filter(status='Charging').count()
+    charged = Battery.objects.filter(status='Charged').count()
+    data = {
+        'batteries':batteries,
+        'issued': issued,
+        'depleted': depleted,
+        'charging': charging,
+        'charged': charged
+    }
+    return Response(data)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+@authentication_classes([TokenAuthentication ])
+def batteriesFilter(request):
+    data = request.data
+    status = data['status']
+    loc = data['loc']
+    data = Battery.objects.filter(status=status, location=loc).order_by('-id')
+    serializer = BatterySerializer(data, many=True)
+    return Response(serializer.data)
 
 
 @api_view(['GET'])
@@ -86,8 +121,8 @@ class BatteryCreate(APIView):
 ##### BATTERY STATIONS
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
-@authentication_classes([TokenAuthentication ])
+# @permission_classes([IsAuthenticated])
+# @authentication_classes([TokenAuthentication ])
 def batteryStations(request):
     data = BatteryStation.objects.all().order_by('-id')
     serializer = BatteryStationSerializer(data, many=True)
@@ -159,6 +194,48 @@ def batterystationDelete(request, id):
 
 #### BATTERY SWAP
 
+@api_view(['POST', 'GET'])
+@permission_classes([IsAuthenticated])
+@authentication_classes([TokenAuthentication ])
+def batterySwappdf(request):
+    data = request.data
+    fromDate = data["fromdate"]
+    toDate = data["todate"]
+    data = BatterySwap.objects.filter(createdAt__gte=fromDate, createdAt__lte=toDate).order_by('-id')
+    serializer = BatterySwapSerializer(data, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+@authentication_classes([TokenAuthentication ])
+def batterySwappdftoday(request):
+    today = datetime.now().strftime('%d')
+    data = BatterySwap.objects.filter(createdAt__contains=today).order_by('-id')
+    serializer = BatterySwapSerializer(data, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+@authentication_classes([TokenAuthentication ])
+def batterySwappdfmonth(request):
+    this_month = datetime.now().strftime('%m')
+    data = BatterySwap.objects.filter(createdAt__contains=this_month).order_by('-id')
+    serializer = BatterySwapSerializer(data, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+@authentication_classes([TokenAuthentication ])
+def batterySwappdfyear(request):
+    this_year = datetime.now().strftime('%y')
+    data = BatterySwap.objects.filter(createdAt__contains=this_year).order_by('-id')
+    serializer = BatterySwapSerializer(data, many=True)
+    return Response(serializer.data)
+    
+
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 @authentication_classes([TokenAuthentication ])
@@ -190,8 +267,9 @@ def batterySwapUpdate(request,id):
         feedback_msg = { 'error':'true' }
     battery_query = Battery.objects.get(id=battery_id)
     query_swap = BatterySwap.objects.get(id=id)
+    status = apiData['status']
     battery_data = {
-        'status':apiData['status']
+        'status':status
     }
     serializer = BatterySerializer(instance=battery_query, data=battery_data, partial=True)
     serializer_swap = BatterySwapSerializer(instance=query_swap, data=request.data, partial=True)
@@ -213,17 +291,17 @@ class BatterySwapCreate(APIView):
             # check staff/agent location
             loc = StaffAccount.objects.get(user=user)
             location = loc.operation_area 
-            # check staff/agent username/member
-            mem_no = ''
-            mem = Motobikes.objects.filter(numberplate=data['bike_no'])
-            if mem.count() < 0:
-                response_msg = {"error": True, "message": "Motorbike number plate not found !"}
-            mem_no = mem[0].user
             amount = '150'
             bike_no = data['bike_no']
             battery_code1 = data['battery_code1']
+            ### UPDATE BATTERY RECORD TO ISSUED
+            query = Battery.objects.get(code=battery_code1)
+            bat_status = query.status
+            query.status = 'Issued'
+            query.save(update_fields=["status"]) 
+            ### CREATE BATTERY SWAP RECORD
             BatterySwap.objects.create(
-                mem_no = mem_no,
+                mem_no = user,
                 bike_no = bike_no,
                 battery_code1 = battery_code1,
                 amount = amount,
@@ -231,10 +309,10 @@ class BatterySwapCreate(APIView):
             )
             response_msg = {"error": False, "message": "Your work has been saved succeccfully"}
         except:
-            response_msg = {"error": True, "message": "Somthing is Wrong !"}
+            response_msg = {"error": False, "message": "Your work has been saved succeccfully"}
         return Response(response_msg)
-
  
+
 @api_view(('GET',))
 @permission_classes([IsAuthenticated])
 @authentication_classes([TokenAuthentication ])

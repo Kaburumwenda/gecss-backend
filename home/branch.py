@@ -41,6 +41,15 @@ def branchList(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 @authentication_classes([TokenAuthentication ])
+def branchList(request):
+    data = []
+    data = GecssBranch.objects.values_list('title', flat=True)
+    return Response(data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+@authentication_classes([TokenAuthentication ])
 def companyBranchbyid(request, id):
     data = GecssBranch.objects.get(id=id)
     serializer = BranchesSerializer(data, many=False)

@@ -1,7 +1,19 @@
 from django.contrib import admin
 from .models import *
-# Register your models here.
+from import_export.admin import ImportExportModelAdmin
 
-admin.site.register(Battery)
-admin.site.register(BatteryStation)
-admin.site.register(BatterySwap)
+class BatteryResource(ImportExportModelAdmin, admin.ModelAdmin ):
+    pass
+
+class BatterySwapAdmin(ImportExportModelAdmin, admin.ModelAdmin ):
+    pass
+
+
+class BatteryStationAdmin(ImportExportModelAdmin, admin.ModelAdmin ):
+    pass
+
+
+
+admin.site.register(Battery, BatteryResource)
+admin.site.register(BatteryStation, BatteryStationAdmin)
+admin.site.register(BatterySwap, BatterySwapAdmin)

@@ -15,3 +15,10 @@ class userAccountSerializer(ModelSerializer):
             'id','client', 'memNo', 'bikes', 'idNo','phone','alt_phone','sex','age','occupation',
             'residential','operation_area','amount','balance','createdAt','updatedAt'
         ]
+
+
+class ExpenseSerializer(ModelSerializer):
+    class Meta:
+        model = Expense
+        fields = [ 'id', 'item', 'quantity', 'units_conversion', 'price',
+                 'approvedby','department', 'date', 'status', 'createdAt']

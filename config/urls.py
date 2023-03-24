@@ -14,5 +14,6 @@ urlpatterns = [
     path('', include('battery.urls')),
     path('', include('motobikes.urls')),
     path('', include('mpesa.urls')),
+    path('', include('HRMS.urls')),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

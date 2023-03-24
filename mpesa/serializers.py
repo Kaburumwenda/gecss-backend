@@ -4,5 +4,8 @@ from .models import *
 
 class MpesaSerializer(ModelSerializer):
     class Meta:
-        model = MpesaCipher
-        fields = [ 'id', 'client', 'memNo', 'mobile', 'amount', 'checkoutid', 'createdAt', 'updatedAt', 'status']
+        model = MpesaPayment
+        fields = [ 
+            'id', 'transactionType', 'transID', 'transTime', 'firstName',
+            'transAmount','billRefNumber','orgAccountBalance', 'agentCommission', 'MSISDN', 'created'
+            ]

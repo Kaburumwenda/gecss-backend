@@ -12,6 +12,50 @@ from django.db.models import Avg, Count, Q, F
 
 
 ##### ISSUE BATTERY
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+@authentication_classes([TokenAuthentication ])
+def agent_battery_swap(request):
+    user = request.user
+    loc = StaffAccount.objects.get(user=user)
+    agent_location = loc.operation_area
+    data = Battery.objects.filter(location=agent_location ).order_by('-id')
+    serializer = BatterySerializer(data, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+@authentication_classes([TokenAuthentication ])
+def agent_battery_charged(request):
+    user = request.user
+    loc = StaffAccount.objects.get(user=user)
+    agent_location = loc.operation_area 
+    data = Battery.objects.filter(location=agent_location ,status='Charged').order_by('-id')[:50]
+    serializer = BatterySerializer(data, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+@authentication_classes([TokenAuthentication ])
+def agent_battery_issued(request):
+    user = request.user
+    data = BatterySwap.objects.filter(mem_no=user, status='Issued').order_by('-id')[:50]
+    serializer = BatterySwapSerializer(data, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+@authentication_classes([TokenAuthentication ])
+def agent_battery_depleted(request):
+    user = request.user
+    data = BatterySwap.objects.filter(mem_no=user, status='Depleted').order_by('-id')[:50]
+    serializer = BatterySwapSerializer(data, many=True)
+    return Response(serializer.data)
+
+
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 @authentication_classes([TokenAuthentication ])
@@ -21,7 +65,7 @@ def agents_batteries(request):
     loc = StaffAccount.objects.get(user=user)
     agent_location = loc.operation_area 
     battery_charged = Battery.objects.filter(location=agent_location, status='Charged').count()
-    battery_depleted = BatterySwap.objects.filter(mem_no=user, status='Depleted').count()
+    battery_depleted = Battery.objects.filter(location=agent_location, status='Depleted').count()
     battery_issued = Battery.objects.filter(location=agent_location, status='Issued').count()
     data = {
         'charged':battery_charged,
@@ -42,7 +86,7 @@ class BatteryAgentsSwapCreate(APIView):
             # check staff/agent location
             loc = StaffAccount.objects.get(user=user)
             location = loc.operation_area 
-            amount = '150'
+            amount = '220'
             bike_no = data['bike_no']
             battery_code1 = data['battery_code1']
             ### UPDATE BATTERY RECORD TO ISSUED
@@ -101,19 +145,9 @@ class BatteryAgentsRetake(APIView):
 
     def post(self, request):
         try:
-            user = request.user
             data = request.data
-            # check staff/agent location
-            # loc = StaffAccount.objects.get(user=user)
-            # location = loc.operation_area 
-            # amount = '150'
-            # status = 'Depleted'
             battery_code1 = data['battery_code']
-            ### bike number
-            # swap_record = BatterySwap.objects.filter(battery_code1=data['battery_code'], status='Issued')[0]
-            # bike = swap_record.bike_no
-            # bike_no = bike
-            ### UPDATE BATTERY RECORD TO ISSUED
+    
             query = Battery.objects.get(code=battery_code1)
             query.status = 'Depleted'
             query.save(update_fields=["status"]) 
@@ -122,7 +156,7 @@ class BatteryAgentsRetake(APIView):
             query.status = 'Depleted'
             query.save(update_fields=["status"]) 
            
-            response_msg = {"error": "0", "message": "Battery issued succeccfully"}
+            response_msg = {"error": "0", "message": "Battery taken succeccfully"}
         except:
-            response_msg = {"error": "1", "message": "Something is Wrong !. Ensure you have internet connection"}
+            response_msg = {"error": "1", "message": "Something is Wrong !. Please try again later"}
         return Response(response_msg)

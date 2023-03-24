@@ -19,7 +19,7 @@ class BatteryStation(models.Model):
 
     def __str__(self):
         return self.title
-
+ 
 
 class BatterySwap(models.Model):
     bike_no = models.CharField(max_length=150)

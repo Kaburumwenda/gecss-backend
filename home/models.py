@@ -6,7 +6,6 @@ from django.conf import settings
 class BatteryStation(models.Model):
     location = models.CharField(max_length=255)
     description = models.CharField(max_length=555)
-    image = models.ImageField(upload_to='battery_centers')
     charged_battery = models.PositiveIntegerField(default=0)
     discharged_battery = models.PositiveIntegerField(default=0)
     date = models.DateTimeField(auto_now=True)
@@ -18,7 +17,6 @@ class BatteryStation(models.Model):
         if self.image:
             return settings.BASE_URL + self.image.url
         return ''
-
 
 
 class GecssBranch(models.Model):
@@ -36,3 +34,31 @@ class GecssBranch(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class AgentNotification(models.Model):
+    source = models.CharField(max_length=255)
+    title = models.CharField(max_length=255)
+    message = models.CharField(max_length=555)
+    status = models.CharField(max_length=50, default='Active' )
+    date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
+
+
+class CompanyTrend(models.Model):
+    title = models.CharField(max_length=255)
+    desc = models.TextField()
+    image = models.ImageField(upload_to='company/trends', blank=True)
+    imgurl = models.CharField(max_length=1024, blank=True)
+    date = models.DateTimeField(auto_now=True)
+    status = models.CharField(max_length=50, default='Active')
+
+    def __str__(self):
+        return self.title
+
+    def Imgsrc(self):
+        if self.image:
+            return settings.BASE_URL + self.image.url
+        return ''

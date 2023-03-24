@@ -66,7 +66,7 @@ def lipa_na_mpesa_online(request):
         "PartyB": LipanaMpesaPpassword.Business_short_code,
         "PhoneNumber": phone_number,
         "CallBackURL": "https://yummy-peaches-retire-197-232-147-3.loca.lt/mpesa/confirmation",
-        "AccountReference": "GECSS INVESTMENT",
+        "AccountReference": phone,
         "TransactionDesc": "GECSS INVESTMENT"
     }
 
@@ -78,9 +78,7 @@ def lipa_na_mpesa_online(request):
 @permission_classes([IsAuthenticated])
 @authentication_classes([TokenAuthentication ])
 def mpesa_cipher(request):
-    user_id = request.user
     data = request.data
-    resp_msg = {}
     # sleep(10)
     consumer_key = 'En5W08NAEaGrlCSA1S4UZkTkAA4UH5gG'
     consumer_secret = 'zqU1ud4AjBQLpAh7'
@@ -102,41 +100,7 @@ def mpesa_cipher(request):
     resp = requests.post(api_url, json=request, headers=headers)
     resp1 = resp.text
     resp2 = json.loads(resp1)
-    result_code = resp2.get('ResultCode')
-    result_msg = resp2.get('ResultDesc')
-    if result_code == '0':
-        user = User.objects.get(username=user_id)
-        amount = data['amount']
-        mobile = data['mobile']
-        checkoutid = data['checkoutid']
-        #### CREATING NEW MPESA TRANSACTION RECORD
-        MpesaCipher.objects.create(
-            user = user,
-            mobile = mobile,
-            amount = amount,
-            checkoutid = checkoutid,
-        )
-        #### CREATING NEW TRANSACTIONS
-        Transaction.objects.create(
-            user = user,
-            amount = amount,
-        )
-        ### UPDATING USER BALANCE
-        query = userAccount.objects.get(user=user)
-        initial_bal = query.balance
-        recur_bal = initial_bal - int(amount)
-        query.balance = recur_bal
-        query.save(update_fields=["balance"]) 
-        resp_msg = {
-            "error":"0",
-            "success": result_msg
-        }
-    if result_code != '0':
-        resp_msg = {
-            "error":"1",
-            "success": result_msg
-        }
-    return Response(resp_msg)
+    return Response(resp)
 
 
 @csrf_exempt
@@ -146,52 +110,27 @@ def register_urls(request):
     headers = {"Authorization": "Bearer %s" % access_token}
     options = {"ShortCode": LipanaMpesaPpassword.Test_c2b_shortcode,
                "ResponseType": "Completed",
-               "ConfirmationURL": "https://gecss-ke.com/api/v1/c2b/confirmation",
-               "ValidationURL": "https://gecss-ke.com/api/v1/c2b/validation"}
+               "ConfirmationURL": "https://aws.gecss.v3engine.gecss-ke.com/v1/c2b/confirmation",
+               "ValidationURL": "https://aws.gecss.v3engine.gecss-ke.com/v1/c2b/validation"}
     response = requests.post(api_url, json=options, headers=headers)
 
     return HttpResponse(response.text)
 
 
-
 @csrf_exempt
 @require_POST
 def confirmation(request):
-    print('Hello Mwenda')
-    stk ={}
     mpesa_body =request.body.decode('utf-8')
     mpesa_payment = json.loads(mpesa_body)
-    stk = mpesa_payment.get("Body")
-    stk_callback = stk.get("stkCallback")
-    result_code = stk_callback.get("ResultCode")
-    result_desc = stk_callback.get("ResultDesc")
-    print('############################') # 'ResultCode': 1032, 'ResultDesc':
-    print(result_desc)
-    print(result_code)
-    print(mpesa_payment)
-
-    # mpesa_body =request.body.decode('utf-8')
-    # mpesa_payment = json.loads(mpesa_body)
-    # print(mpesa_payment)
-    # payment = MpesaPayment(
-    #     first_name=mpesa_payment['FirstName'],
-    #     last_name=mpesa_payment['LastName'],
-    #     middle_name=mpesa_payment['MiddleName'],
-    #     description=mpesa_payment['TransID'],
-    #     phone_number=mpesa_payment['MSISDN'],
-    #     amount=mpesa_payment['TransAmount'],
-    #     reference=mpesa_payment['BillRefNumber'],
-    #     organization_balance=mpesa_payment['OrgAccountBalance'],
-    #     type=mpesa_payment['TransactionType'],
-
-    # )
-    # payment.save()
-
-    # context = {
-    #     "ResultCode": 0,
-    #     "ResultDesc": "Accepted"
-    #
-    response='Hello Kaburu'
+    MpesaPayment.objects.create(
+         firstName=mpesa_payment['FirstName'],
+         transID=mpesa_payment['TransID'],
+         MSISDN=mpesa_payment['MSISDN'],
+         transTime=mpesa_payment['TransTime'],
+         transAmount=mpesa_payment['TransAmount'],
+         billRefNumber=mpesa_payment['BillRefNumber'],
+         orgAccountBalance=mpesa_payment['OrgAccountBalance'],
+         transactionType=mpesa_payment['TransactionType'],
+    )
+    response='Success'
     return HttpResponse(response)
-
-    # return JsonResponse(dict(context))
