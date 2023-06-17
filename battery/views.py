@@ -240,7 +240,7 @@ def batterySwappdfyear(request):
 @permission_classes([IsAuthenticated])
 @authentication_classes([TokenAuthentication ])
 def batterySwap(request):
-    data = BatterySwap.objects.all().order_by('-id')
+    data = BatterySwap.objects.filter().order_by('-id')[:50]
     serializer = BatterySwapSerializer(data, many=True)
     return Response(serializer.data)
 
@@ -317,7 +317,7 @@ class BatterySwapCreate(APIView):
 @permission_classes([IsAuthenticated])
 @authentication_classes([TokenAuthentication ])
 def batterySwapSearch(request, cod):
-    data = BatterySwap.objects.filter(Q(mem_no__icontains=cod) | Q(battery_code1__icontains=cod) | Q(bike_no__icontains=cod) )
+    data = BatterySwap.objects.filter(Q(mem_no__icontains=cod) | Q(battery_code1__icontains=cod) | Q(bike_no__icontains=cod) ).order_by('-id')
     serializer = BatterySwapSerializer(data, many=True)
     return Response(serializer.data)
 

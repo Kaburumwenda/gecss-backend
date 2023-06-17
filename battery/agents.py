@@ -87,8 +87,9 @@ class BatteryAgentsSwapCreate(APIView):
             loc = StaffAccount.objects.get(user=user)
             location = loc.operation_area 
             amount = '220'
-            bike_no = data['bike_no']
-            battery_code1 = data['battery_code1']
+            #bike_no = data.cleaned_data['bike_no'].strip()
+            bike_no = data['bike_no'].replace(" ", "")
+            battery_code1 = data['battery_code1'].replace(" ", "")
             ### UPDATE BATTERY RECORD TO ISSUED
             query = Battery.objects.get(code=battery_code1)
             bat_status = query.status

@@ -82,6 +82,7 @@ def mpesaAgentStatic(request):
 
 
 ### backoffice mpesa summary
+
 @api_view(['GET'])
 # @permission_classes([IsAuthenticated])
 # @authentication_classes([TokenAuthentication ])
@@ -132,6 +133,39 @@ def mpesaOfficeStat(request):
 
 #### MPESA OFFICE FILTERS BY DATE
 
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+@authentication_classes([TokenAuthentication ])
+def mpesa_stat_range_total(request):
+    post_data = request.data
+    today_start = post_data['fromdate']
+    today_end = post_data['todate']
+    data1 = MpesaPayment.objects.filter(created__range=[today_start, today_end ], billRefNumber='1111' )
+    data2 = MpesaPayment.objects.filter(created__range=[today_start, today_end ], billRefNumber='9017' )
+    data3 = MpesaPayment.objects.filter(created__range=[today_start, today_end ], billRefNumber='2580' )
+    data4 = MpesaPayment.objects.filter(created__range=[today_start, today_end ])
+    data_tot_1 = 0
+    data_tot_2 = 0
+    data_tot_3 = 0
+    other_tot_1 = 0
+    for ts in data1:
+        data_tot_1 += ts.transAmount
+    for ts in data2:
+        data_tot_2 += ts.transAmount
+    for ts in data3:
+        data_tot_3 += ts.transAmount
+    for ts in data4:
+        other_tot_1 += ts.transAmount
+    data_tot = data_tot_1 + data_tot_2 + data_tot_3
+    other_tot = other_tot_1 - data_tot
+    data_resp = {
+        'swap':data_tot,
+        'total': other_tot_1,
+        'others': other_tot,
+    }
+    return Response(data_resp)
+
+
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 @authentication_classes([TokenAuthentication ])
@@ -172,6 +206,7 @@ def mpesaFilterYear(request):
     serializer = MpesaSerializer(data, many=True)
     return Response(serializer.data)
 
+
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 @authentication_classes([TokenAuthentication ])
@@ -182,6 +217,21 @@ def mpesaFilterRange(request):
     data = MpesaPayment.objects.filter(created__range=[today_start, today_end ] )
     serializer = MpesaSerializer(data, many=True)
     return Response(serializer.data)
+
+
+@api_view(['POST'])
+def mpesa_acc_filter(request):
+    qry = request.data
+    ref = qry['acc_filter']
+    fromdate = qry['fromdate']
+    todate = qry['todate']
+    if len(fromdate) > 0:
+        data = MpesaPayment.objects.filter(created__range=[fromdate, todate ] ).filter(billRefNumber=ref)
+        serializer = MpesaSerializer(data, many=True)
+    data = MpesaPayment.objects.filter(billRefNumber=ref)
+    serializer = MpesaSerializer(data, many=True)
+    return Response(serializer.data)
+
 
 #### OFFICE > TRANSACTION
 

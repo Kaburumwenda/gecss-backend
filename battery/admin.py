@@ -6,7 +6,9 @@ class BatteryResource(ImportExportModelAdmin, admin.ModelAdmin ):
     pass
 
 class BatterySwapAdmin(ImportExportModelAdmin, admin.ModelAdmin ):
-    pass
+    search_fields = ['bike_no']
+    list_filter = ['status']
+    list_display = ['bike_no', 'battery_code1', 'mem_no', 'amount', 'status', 'createdAt']
 
 
 class BatteryStationAdmin(ImportExportModelAdmin, admin.ModelAdmin ):

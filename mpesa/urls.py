@@ -22,15 +22,20 @@ urlpatterns = [
     path('v1/mpesa/delete/<int:id>', office.mpesaDelete ),
     path('v1/mpesa/search/<str:cod>', office.mpesaSearch ),
     path('v1/mpesa/office/stat', office.mpesaOfficeStat ),
+    ###MPESA PDF
     path('v1/mpesa/office/stat/today', office.mpesaFilterToday ),
     path('v1/mpesa/office/stat/week', office.mpesaFilterWeek ),
     path('v1/mpesa/office/stat/month', office.mpesaFilterMonth ),
     path('v1/mpesa/office/stat/year', office.mpesaFilterYear ),
     path('v1/mpesa/office/stat/range', office.mpesaFilterRange ),
+    path('v1/mpesa/office/acc_filter', office.mpesa_acc_filter ),
+    path('v1/mpesa/office/range/total_stat', office.mpesa_stat_range_total),
+
     ### AGENTS
     path('v1/mpesa/agents_list', office.mpesaAgentList ),
     path('v1/mpesa/agents_statistics', office.mpesaAgentStatic ),
     path('v1/mpesa/agent/search/<str:query>', office.mpesaAgentSearch ),
     path('v1/mpesa/agent/cipher', agents.agent_mpesa_cipher ),
     path('v1/mpesa/agent/pay', agents.agent_lipa_na_mpesa ),
+
 ]

@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'motobikes',
     'mpesa',
     'HRMS',
+    'reports',
 ]
 
 MIDDLEWARE = [
