@@ -15,6 +15,7 @@ urlpatterns = [
     path('v1/reports/mpesa_statistics/year', mpesa.mpesa_statistics_year),
     path('v1/reports/mpesa_statistics/yearly', mpesa.mpesa_statistics_yearly),
     path('v1/reports/mpesa_statistics/pdf_excel', mpesa.mpesa_statistics_pdf_excel),
+    path('v1/reports/mpesa/list/<int:Tcounts>', mpesa.mpesa_report_List),
 
     #### BATTERY 
     path('v1/reports/battery_reports', battery.battery_report),

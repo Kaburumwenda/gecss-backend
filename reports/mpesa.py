@@ -9,10 +9,19 @@ from django.db.models.functions import  ExtractDay, ExtractMonth, ExtractYear
 from django.db.models.functions import TruncDate
 
 from mpesa.models import MpesaPayment
+from mpesa.serializers import *
 
 from datetime import datetime, timedelta, time
 from django.utils import timezone
 
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+@authentication_classes([TokenAuthentication ])
+def mpesa_report_List(request, Tcounts):
+    data = MpesaPayment.objects.all().order_by('-id')[:Tcounts]
+    serializer = MpesaSerializer(data, many=True)
+    return Response(serializer.data)
 
 
 @api_view(['POST'])
@@ -24,11 +33,11 @@ def mpesa_statistics_pdf_excel(request):
     today_end = post_data['todate']
 
     data = MpesaPayment.objects.filter(created__range=[today_start, today_end ]).annotate(
-        date=TruncDate('created')).values('date').annotate(
-        day=ExtractDay('created')).annotate(
-        month=ExtractMonth('created')).annotate(
-        year=ExtractYear('created')).annotate(
-        total=Sum('transAmount')).values('day', 'month', 'year', 'date', 'total').order_by('date')
+        Date=TruncDate('created')).values('Date').annotate(
+        Day=ExtractDay('created')).annotate(
+        Month=ExtractMonth('created')).annotate(
+        Year=ExtractYear('created')).annotate(
+        Revenue=Sum('transAmount')).values('Date','Month', 'Day', 'Year', 'Revenue').order_by('Date')
     return Response(data)
 
 

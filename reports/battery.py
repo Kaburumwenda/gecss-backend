@@ -94,17 +94,12 @@ def battery_statistics_pdf_excel(request):
     today_end = post_data['todate']
 
     data = BatterySwap.objects.filter(createdAt__range=[today_start, today_end ]).annotate(
-        date=TruncDate('createdAt')).values('date').annotate(
-        day=ExtractDay('createdAt')).annotate(
-        month=ExtractMonth('createdAt')).annotate(
-        year=ExtractYear('createdAt')).annotate(
-        total=Sum('amount')).annotate(
-        swaps = Count('battery_code1')
+        Date=TruncDate('createdAt')).values('Date').annotate(
+        Revenue=Sum('amount')).annotate(
+        Swaps = Count('battery_code1')
           ).annotate(
-        power_units_kw = Count('battery_code1')* 3.5
-          ).annotate(
-        ghg=Count('battery_code1') * 8.64
-          ).values('day', 'month', 'year', 'date', 'swaps', 'total', 'power_units_kw', 'ghg').order_by('date')
+        Power_units = Count('battery_code1')* 3.5
+          ).values('Date', 'Swaps', 'Power_units',  'Revenue', ).order_by('Date')
     return Response(data)
 
 

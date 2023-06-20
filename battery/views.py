@@ -50,7 +50,7 @@ def batteriesFilter(request):
 @permission_classes([IsAuthenticated])
 @authentication_classes([TokenAuthentication ])
 def batteries(request):
-    data = Battery.objects.all().order_by('-id')
+    data = Battery.objects.all().order_by('-code')
     serializer = BatterySerializer(data, many=True)
     return Response(serializer.data)
 
