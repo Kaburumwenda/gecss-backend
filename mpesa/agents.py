@@ -5,7 +5,7 @@ import requests
 from requests.auth import HTTPBasicAuth
 import json
 from django.views.decorators.csrf import csrf_exempt
-from .mpesa_creditials import MpesaAccessToken, LipanaMpesaPpassword 
+#from .mpesa_creditials import MpesaAccessToken, LipanaMpesaPpassword 
 from django.views.decorators.http import require_POST
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
@@ -16,7 +16,7 @@ from finance.models import Transaction, userAccount
 from django.contrib.auth.models import User
 from rest_framework.response import Response
 
-
+"""
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 @authentication_classes([TokenAuthentication ])
@@ -86,3 +86,5 @@ def agent_mpesa_cipher(request):
     resp1 = resp.text
     resp2 = json.loads(resp1)
     return Response(resp1)
+
+    """

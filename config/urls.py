@@ -17,5 +17,6 @@ urlpatterns = [
     path('', include('mpesa.urls')),
     path('', include('HRMS.urls')),
     path('', include('reports.urls')),
+    path('', include('riders.urls')),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

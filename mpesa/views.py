@@ -5,7 +5,7 @@ import requests
 from requests.auth import HTTPBasicAuth
 import json
 from django.views.decorators.csrf import csrf_exempt
-from .mpesa_creditials import MpesaAccessToken, LipanaMpesaPpassword 
+#from .mpesa_creditials import MpesaAccessToken, LipanaMpesaPpassword 
 from django.views.decorators.http import require_POST
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
@@ -18,7 +18,7 @@ from rest_framework.response import Response
 
 # Create your views here.
 	
-
+"""
 def getAccessToken(request):
     consumer_key = 'En5W08NAEaGrlCSA1S4UZkTkAA4UH5gG'
     consumer_secret = 'zqU1ud4AjBQLpAh7'
@@ -79,7 +79,6 @@ def lipa_na_mpesa_online(request):
 @authentication_classes([TokenAuthentication ])
 def mpesa_cipher(request):
     data = request.data
-    # sleep(10)
     consumer_key = 'En5W08NAEaGrlCSA1S4UZkTkAA4UH5gG'
     consumer_secret = 'zqU1ud4AjBQLpAh7'
     api_URL = 'https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials'
@@ -116,7 +115,7 @@ def register_urls(request):
 
     return HttpResponse(response.text)
 
-
+"""
 @csrf_exempt
 @require_POST
 def confirmation(request):

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'mpesa',
     'HRMS',
     'reports',
+    'riders',
 ]
 
 MIDDLEWARE = [

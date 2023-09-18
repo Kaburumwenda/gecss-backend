@@ -3,6 +3,7 @@ from .import views
 from .import swap_mpesa
 from .import battery
 from .import mpesa
+from .import website
 
 
 urlpatterns = [
@@ -41,4 +42,7 @@ urlpatterns = [
     path('v1/reports/swap_mpesa_pie/month', swap_mpesa.swap_mpesa_report_pie_month),
     path('v1/reports/swap_mpesa_pie/year', swap_mpesa.swap_mpesa_report_pie_year),
     path('v1/reports/swap_mpesa_pie/range', swap_mpesa.swap_mpesa_report_pie_range),
+
+    ### WEBSITE
+    path('v1/reports/website_report', website.website_report),
 ]
